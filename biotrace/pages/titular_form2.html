@@ -59,20 +59,71 @@
       reader.readAsDataURL(file);
     }
 
-    function generarQR() {
+    async function generarQR() {
       const err = document.getElementById('errMsg');
       const longitud = document.getElementById('longitud').value.trim();
       const volumen  = document.getElementById('volumen').value.trim();
       const fecha    = document.getElementById('fecha').value;
+      const foto1 = document.getElementById('foto1').files[0];
+      const foto2 = document.getElementById('foto2').files[0];
+      
       if (!longitud || !volumen || !fecha) {
         err.textContent = 'Completa longitud, volumen y fecha.';
         err.style.display = 'block'; return;
       }
+      if (!foto1 || !foto2) {
+        err.textContent = 'Debes subir ambas fotografías.';
+        err.style.display = 'block'; return;
+      }
+      
       err.style.display = 'none';
+      
       const troza = JSON.parse(sessionStorage.getItem('btl_troza'));
-      troza.longitud = longitud; troza.volumen = volumen; troza.fecha = fecha;
-      sessionStorage.setItem('btl_troza', JSON.stringify(troza));
-      location.href = 'titular_qr.html';
+      const titular_id = sessionStorage.getItem('btl_user_id') || 1;
+      
+      const formData = new FormData();
+      formData.append('titular_id', titular_id);
+      formData.append('numero_parcela', troza.parcela);
+      formData.append('especie', troza.especie);
+      formData.append('nombre_cientifico', troza.especie);
+      formData.append('dap_cm', troza.dap);
+      formData.append('longitud_troza', longitud);
+      formData.append('volumen_m3', volumen);
+      
+      const [lat, lon] = troza.gps.split(',').map(s => s.trim());
+      formData.append('latitud', lat || '0');
+      formData.append('longitud', lon || '0');
+      formData.append('plan_manejo', 'PM-2026-001');
+      formData.append('observaciones', `Registrado desde BioTrace - ${fecha}`);
+      formData.append('foto_corte', foto1);
+      formData.append('foto_troza', foto2);
+      
+      const btn = event.target;
+      btn.textContent = '⏳ Registrando...';
+      btn.disabled = true;
+      
+      try {
+        const response = await fetch('http://localhost:5000/api/traz/censo', {
+          method: 'POST',
+          body: formData
+        });
+        const result = await response.json();
+        
+        if (result.success && result.trozo) {
+          sessionStorage.setItem('btl_trozo_registrado', JSON.stringify(result.trozo));
+          location.href = 'titular_qr.html';
+        } else {
+          err.textContent = result.error || 'Error al registrar trozo';
+          err.style.display = 'block';
+          btn.textContent = 'Generar código QR ›';
+          btn.disabled = false;
+        }
+      } catch (error) {
+        err.textContent = 'Error de conexión con el servidor';
+        err.style.display = 'block';
+        btn.textContent = 'Generar código QR ›';
+        btn.disabled = false;
+      }
     }
   </script>
 </body>

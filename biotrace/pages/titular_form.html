@@ -38,7 +38,8 @@
     <a href="../index.html" class="back-link">← Salir</a>
   </div>
   <script>
-    if (!sessionStorage.getItem('btl_role')) location.href = '../pages/login.html?role=titular';
+    const role = sessionStorage.getItem('btl_role');
+    if (!role || role !== 'titular') location.href = '../pages/login.html?role=titular';
 
     function getGPS() {
       const btn = document.querySelector('.btn-gps');

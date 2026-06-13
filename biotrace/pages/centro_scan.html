@@ -22,38 +22,76 @@
     <a href="centro_dashboard.html" class="back-link" id="backBtn">← Volver</a>
   </div>
   <script>
-    if (sessionStorage.getItem('btl_role') !== 'centro') location.href = '../pages/login.html?role=centro';
+    if (sessionStorage.getItem('btl_role') !== 'centro_transformacion') location.href = '../pages/login.html?role=centro';
 
     const html5Qr = new Html5Qrcode("reader");
     html5Qr.start(
       { facingMode: "environment" },
       { fps: 10, qrbox: { width: 250, height: 250 } },
-      (decoded) => {
+      async (decoded) => {
         html5Qr.stop().catch(() => {});
         document.getElementById('reader').style.display = 'none';
-        document.getElementById('scanHint').style.display = 'none';
+        document.getElementById('scanHint').textContent = '⏳ Buscando información del trozo en el sistema...';
 
-        let data;
-        try { data = JSON.parse(decoded); } catch(e) { data = { raw: decoded }; }
+        let codigoTrozo = decoded;
+        try {
+          const parsed = JSON.parse(decoded);
+          if (parsed.codigo) codigoTrozo = parsed.codigo;
+          else if (parsed.codigo_unico_trozo) codigoTrozo = parsed.codigo_unico_trozo;
+        } catch(e) {}
 
-        const labels = {
-          codigo:  'Código único de troza',
-          gps:     'Coordenadas GPS',
-          parcela: 'Número de parcela',
-          especie: 'Especie',
-          dap:     'DAP',
-          raw:     'Datos'
-        };
-        let html = '';
-        for (const [k, label] of Object.entries(labels)) {
-          if (data[k]) html += `
-            <div class="data-field-group">
-              <div class="data-label">${label}</div>
-              <div class="data-value">${data[k]}</div>
+        try {
+          const response = await fetch(`http://localhost:5000/api/traz/trozo/${encodeURIComponent(codigoTrozo)}`);
+          const result = await response.json();
+          
+          document.getElementById('scanHint').style.display = 'none';
+          
+          if (result.success && result.trozo) {
+            const trozo = result.trozo;
+            const labels = {
+              codigo_unico_trozo: 'Código único de troza',
+              especie: 'Especie',
+              nombre_cientifico: 'Nombre científico',
+              numero_parcela: 'Número de parcela',
+              dap_cm: 'DAP (cm)',
+              longitud_troza: 'Longitud (m)',
+              volumen_m3: 'Volumen (m³)',
+              estado: 'Estado actual',
+              titular_nombre: 'Titular',
+              plan_manejo: 'Plan de Manejo',
+              fecha_hora: 'Fecha de Registro'
+            };
+            let html = '';
+            for (const [k, label] of Object.entries(labels)) {
+              if (trozo[k]) {
+                let valor = trozo[k];
+                if (k === 'fecha_hora') valor = valor.substring(0, 16).replace('T', ' ');
+                html += `
+                  <div class="data-field-group">
+                    <div class="data-label">${label}</div>
+                    <div class="data-value">${valor}</div>
+                  </div>`;
+              }
+            }
+            document.getElementById('scanData').innerHTML = html;
+          } else {
+            document.getElementById('scanData').innerHTML = `
+              <div style="padding:20px; text-align:center; color:#ff6b6b;">
+                <p><strong>⚠️ Trozo no encontrado</strong></p>
+                <p>Código: ${codigoTrozo}</p>
+                <p style="font-size:12px; margin-top:10px;">El trozo no está registrado en el sistema.</p>
+              </div>`;
+          }
+          document.getElementById('scanResult').style.display = 'block';
+        } catch (error) {
+          document.getElementById('scanHint').style.display = 'none';
+          document.getElementById('scanData').innerHTML = `
+            <div style="padding:20px; text-align:center; color:#ff6b6b;">
+              <p><strong>❌ Error de conexión</strong></p>
+              <p style="font-size:12px;">No se pudo conectar con el servidor.</p>
             </div>`;
+          document.getElementById('scanResult').style.display = 'block';
         }
-        document.getElementById('scanData').innerHTML = html;
-        document.getElementById('scanResult').style.display = 'block';
       },
       () => {}
     ).catch(() => {

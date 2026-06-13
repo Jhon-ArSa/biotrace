@@ -18,39 +18,83 @@
       </div>
     </div>
     <div class="chofer-card">
-      <h2 class="section-title dark">Modulo de registro</h2>
-      <div class="driver-photo-container">
-        <label for="driverPhoto" class="driver-photo-label" title="Toca para cambiar foto">
-          <img id="driverPhotoPreview" src="https://placehold.co/200x200/cccccc/666?text=Foto" class="driver-photo" alt="Foto conductor">
-          <input type="file" id="driverPhoto" accept="image/*" capture="user" style="display:none" onchange="previewDriver(this)">
-        </label>
-      </div>
-      <div class="info-row"><span class="info-label">PLACA:</span>     <input type="text" id="placa"     placeholder="ABC-123"       class="info-input"></div>
-      <div class="info-row"><span class="info-label">CONDUCTOR:</span> <input type="text" id="conductor" placeholder="Nombre completo" class="info-input"></div>
-      <div class="info-row"><span class="info-label">DNI:</span>       <input type="text" id="dni"       placeholder="12345678"      class="info-input"></div>
-      <button onclick="guardar()" class="btn btn-teal" style="margin-top:20px">Guardar registro</button>
-      <div id="msg" class="success-msg" style="display:none">✅ Registro guardado correctamente</div>
+      <h2 class="section-title dark">Registrar Guía de Transporte</h2>
+      <div class="info-row"><span class="info-label">CÓDIGO TROZO:</span> <input type="text" id="codigoTrozo" placeholder="Ej: TRZ-2026-001" class="info-input"></div>
+      <div class="info-row"><span class="info-label">PLACA:</span>        <input type="text" id="placa"       placeholder="ABC-123"       class="info-input"></div>
+      <div class="info-row"><span class="info-label">ORIGEN:</span>       <input type="text" id="origen"      placeholder="Lugar de origen" class="info-input"></div>
+      <div class="info-row"><span class="info-label">DESTINO:</span>      <input type="text" id="destino"     placeholder="Lugar de destino" class="info-input"></div>
+      <div class="info-row"><span class="info-label">OBSERVACIONES:</span><textarea id="observaciones" placeholder="Observaciones opcionales" class="info-input" rows="2"></textarea></div>
+      <button onclick="registrarGuia()" class="btn btn-teal" style="margin-top:20px">📋 Registrar Guía</button>
+      <div id="msg" class="success-msg" style="display:none"></div>
+      <div id="err" class="alert" style="display:none; margin-top:10px; background:#ff4444; color:#fff; padding:10px; border-radius:8px;"></div>
     </div>
     <a href="../index.html" class="back-link light">← Salir</a>
   </div>
   <script>
-    if (sessionStorage.getItem('btl_role') !== 'chofer') location.href = '../pages/login.html?role=chofer';
+    if (sessionStorage.getItem('btl_role') !== 'conductor') location.href = '../pages/login.html?role=chofer';
 
-    function previewDriver(input) {
-      const file = input.files[0]; if (!file) return;
-      const reader = new FileReader();
-      reader.onload = e => { document.getElementById('driverPhotoPreview').src = e.target.result; };
-      reader.readAsDataURL(file);
-    }
+    const chofer_id = sessionStorage.getItem('btl_user_id') || 2;
+    const chofer_placa = sessionStorage.getItem('btl_placa') || 'N/A';
+    
+    document.getElementById('placa').value = chofer_placa;
 
-    function guardar() {
-      const placa     = document.getElementById('placa').value.trim();
-      const conductor = document.getElementById('conductor').value.trim();
-      const dni       = document.getElementById('dni').value.trim();
-      if (!placa || !conductor || !dni) { alert('Completa todos los campos.'); return; }
+    async function registrarGuia() {
+      const codigoTrozo = document.getElementById('codigoTrozo').value.trim();
+      const placa       = document.getElementById('placa').value.trim();
+      const origen      = document.getElementById('origen').value.trim();
+      const destino     = document.getElementById('destino').value.trim();
+      const observaciones = document.getElementById('observaciones').value.trim();
+      
+      const err = document.getElementById('err');
       const msg = document.getElementById('msg');
-      msg.style.display = 'block';
-      setTimeout(() => msg.style.display = 'none', 3000);
+      err.style.display = 'none';
+      msg.style.display = 'none';
+      
+      if (!codigoTrozo || !placa || !origen || !destino) {
+        err.textContent = 'Por favor completa todos los campos obligatorios.';
+        err.style.display = 'block';
+        return;
+      }
+      
+      const btn = event.target;
+      btn.textContent = '⏳ Registrando...';
+      btn.disabled = true;
+      
+      try {
+        const response = await fetch('http://localhost:5000/api/traz/guia', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chofer_id: parseInt(chofer_id),
+            codigo_trozo: codigoTrozo,
+            placa: placa,
+            origen: origen,
+            destino: destino,
+            observaciones: observaciones
+          })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          msg.textContent = `✅ Guía registrada: ${result.numero_guia}`;
+          msg.style.display = 'block';
+          document.getElementById('codigoTrozo').value = '';
+          document.getElementById('origen').value = '';
+          document.getElementById('destino').value = '';
+          document.getElementById('observaciones').value = '';
+          setTimeout(() => msg.style.display = 'none', 5000);
+        } else {
+          err.textContent = result.error || 'Error al registrar guía';
+          err.style.display = 'block';
+        }
+      } catch (error) {
+        err.textContent = 'Error de conexión con el servidor';
+        err.style.display = 'block';
+      } finally {
+        btn.textContent = '📋 Registrar Guía';
+        btn.disabled = false;
+      }
     }
   </script>
 </body>

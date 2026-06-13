@@ -17,25 +17,41 @@
     <a href="../index.html" class="btn btn-outline-teal" style="margin-top:10px">Regresar al inicio</a>
   </div>
   <script>
-    const raw = sessionStorage.getItem('btl_troza');
+    const raw = sessionStorage.getItem('btl_trozo_registrado');
     if (!raw) { location.href = 'titular_form.html'; }
-    const troza = JSON.parse(raw);
-    const qrData = encodeURIComponent(JSON.stringify(troza));
+    const trozo = JSON.parse(raw);
+    
+    const qrData = encodeURIComponent(trozo.codigo_unico_trozo || JSON.stringify(trozo));
     document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=256x256&data=${qrData}`;
 
-    const campos = { codigo:'Código', especie:'Especie', parcela:'Parcela', gps:'GPS', fecha:'Fecha' };
+    const campos = { 
+      codigo_unico_trozo: 'Código Único',
+      especie: 'Especie',
+      numero_parcela: 'Parcela',
+      dap_cm: 'DAP (cm)',
+      longitud_troza: 'Longitud',
+      volumen_m3: 'Volumen (m³)',
+      fecha_hora: 'Fecha de Registro'
+    };
     let html = '';
     for (const [k, label] of Object.entries(campos)) {
-      if (troza[k]) html += `<p><strong>${label}:</strong> ${troza[k]}</p>`;
+      if (trozo[k]) {
+        let valor = trozo[k];
+        if (k === 'fecha_hora') valor = valor.substring(0, 16).replace('T', ' ');
+        html += `<p><strong>${label}:</strong> ${valor}</p>`;
+      }
     }
     document.getElementById('resumen').innerHTML = html;
 
     function descargar() {
       const a = document.createElement('a');
       a.href = document.getElementById('qrImg').src;
-      a.download = `troza_${troza.codigo || 'qr'}.png`;
+      a.download = `troza_${trozo.codigo_unico_trozo || 'qr'}.png`;
       a.click();
     }
+    
+    sessionStorage.removeItem('btl_troza');
+    sessionStorage.removeItem('btl_trozo_registrado');
   </script>
 </body>
 </html>
