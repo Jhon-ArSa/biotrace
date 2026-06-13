@@ -66,7 +66,19 @@ def inicializar_identificador():
 
 @app.route('/')
 def index():
-    """Página principal — redirige al sistema de trazabilidad."""
+    """Página principal — sistema BioTrace con diseño actualizado."""
+    return send_from_directory('biotrace', 'index.html')
+
+
+@app.route('/biotrace/<path:filename>')
+def biotrace_files(filename):
+    """Sirve archivos del sistema BioTrace."""
+    return send_from_directory('biotrace', filename)
+
+
+@app.route('/trazabilidad')
+def trazabilidad_old():
+    """Sistema de trazabilidad antiguo (legacy)."""
     return render_template('trazabilidad.html')
 
 
