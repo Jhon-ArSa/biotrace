@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bio Trace Labs – Login</title>
     <link rel="stylesheet" href="../css/style.css">
 </head>
-
 <body class="green-bg">
     <div class="screen">
         <div class="logo-row">
@@ -29,8 +27,10 @@
         <div class="demo-box" id="demoBox"></div>
     </div>
     <script>
+        const API_BASE = window.location.origin;
         const params = new URLSearchParams(location.search);
         const role = params.get('role') || 'titular';
+        
         const labels = {
             titular: 'Titular',
             chofer: 'Chofer',
@@ -38,38 +38,38 @@
         };
         document.getElementById('roleDisplay').value = labels[role] || 'Titular';
 
-        // Credenciales de prueba por rol
+        // Credenciales de prueba REALES del backend
         const usuarios = {
             titular: {
-                email: 'titular@biotrace.com',
-                password: 'titular2026'
+                email: 'titular@demo.com',
+                password: 'demo123'
             },
             chofer: {
-                email: 'chofer@biotrace.com',
-                password: 'chofer2026'
+                email: 'chofer@demo.com',
+                password: 'demo123'
             },
             centro: {
-                email: 'centro@biotrace.com',
-                password: 'centro2026'
+                email: 'centro@demo.com',
+                password: 'demo123'
             }
         };
 
-        // Mostrar caja de credenciales de prueba
+        // Mostrar caja de credenciales
         const creds = usuarios[role];
         document.getElementById('demoBox').innerHTML = `
-      <p class="demo-title">🔑 Credenciales de prueba</p>
-      <div class="demo-row">
-        <span class="demo-label">Correo</span>
-        <span class="demo-value">${creds.email}</span>
-        <button class="demo-copy" onclick="copiar('email','${creds.email}',this)">Copiar</button>
-      </div>
-      <div class="demo-row">
-        <span class="demo-label">Contraseña</span>
-        <span class="demo-value">${creds.password}</span>
-        <button class="demo-copy" onclick="copiar('password','${creds.password}',this)">Copiar</button>
-      </div>
-      <button class="demo-fill" onclick="rellenar()">✨ Rellenar automático</button>
-    `;
+            <p class="demo-title">🔑 Credenciales de prueba</p>
+            <div class="demo-row">
+                <span class="demo-label">Correo</span>
+                <span class="demo-value">${creds.email}</span>
+                <button class="demo-copy" onclick="copiar('email','${creds.email}',this)">Copiar</button>
+            </div>
+            <div class="demo-row">
+                <span class="demo-label">Contraseña</span>
+                <span class="demo-value">${creds.password}</span>
+                <button class="demo-copy" onclick="copiar('password','${creds.password}',this)">Copiar</button>
+            </div>
+            <button class="demo-fill" onclick="rellenar()">✨ Rellenar automático</button>
+        `;
 
         function copiar(campo, valor, btn) {
             navigator.clipboard.writeText(valor).catch(() => {});
@@ -89,7 +89,7 @@
             centro: '../pages/centro_dashboard.html'
         };
 
-        function doLogin() {
+        async function doLogin() {
             const email = document.getElementById('email').value.trim();
             const pass = document.getElementById('password').value.trim();
             const alertBox = document.getElementById('alertBox');
@@ -100,19 +100,68 @@
                 return;
             }
 
-            // Validar credenciales
-            if (email !== creds.email || pass !== creds.password) {
-                alertBox.textContent = '❌ Correo o contraseña incorrectos. Usa las credenciales de prueba.';
-                alertBox.style.display = 'block';
-                return;
-            }
+            alertBox.textContent = 'Verificando credenciales...';
+            alertBox.style.display = 'block';
+            alertBox.style.background = '#fff3cd';
+            alertBox.style.color = '#856404';
 
-            alertBox.style.display = 'none';
-            sessionStorage.setItem('btl_role', role);
-            sessionStorage.setItem('btl_email', email);
-            location.href = destinos[role];
+            try {
+                // Llamar a la API REAL del backend
+                const response = await fetch(`${API_BASE}/api/traz/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password: pass })
+                });
+
+                const result = await response.json();
+
+                if (result.success && result.usuario) {
+                    // Login exitoso - guardar datos del usuario
+                    sessionStorage.setItem('btl_role', result.usuario.rol);
+                    sessionStorage.setItem('btl_email', result.usuario.email);
+                    sessionStorage.setItem('btl_user_id', result.usuario.id);
+                    sessionStorage.setItem('btl_centro_id', result.usuario.id); // Para compatibilidad
+                    sessionStorage.setItem('btl_user_name', result.usuario.nombre);
+                    
+                    alertBox.textContent = '✓ Login exitoso. Redirigiendo...';
+                    alertBox.style.background = '#d4edda';
+                    alertBox.style.color = '#155724';
+                    
+                    // Redirigir según el rol REAL del backend
+                    setTimeout(() => {
+                        if (result.usuario.rol === 'titular') {
+                            location.href = '../pages/titular_form.html';
+                        } else if (result.usuario.rol === 'chofer') {
+                            location.href = '../pages/chofer_dashboard.html';
+                        } else if (result.usuario.rol === 'centro_transformacion' || result.usuario.rol === 'centro') {
+                            location.href = '../pages/centro_dashboard.html';
+                        } else {
+                            location.href = destinos[role] || '../index.html';
+                        }
+                    }, 800);
+                } else {
+                    alertBox.textContent = '❌ ' + (result.error || 'Credenciales incorrectas');
+                    alertBox.style.display = 'block';
+                    alertBox.style.background = '#f8d7da';
+                    alertBox.style.color = '#721c24';
+                }
+            } catch (error) {
+                console.error('Error de login:', error);
+                alertBox.textContent = '❌ Error de conexión. Verifica que el servidor esté corriendo en http://localhost:5000';
+                alertBox.style.display = 'block';
+                alertBox.style.background = '#f8d7da';
+                alertBox.style.color = '#721c24';
+            }
         }
+
+        // Permitir login con Enter
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                doLogin();
+            }
+        });
     </script>
 </body>
-
 </html>

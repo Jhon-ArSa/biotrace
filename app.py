@@ -56,7 +56,7 @@ def inicializar_identificador():
             print(f"[App] Error al inicializar Gemini: {e}")
             identificador = None
     else:
-        print("[App] ⚠️ No se configuró API Key. Usando modo demo.")
+        print("[App] No se configuro API Key. Usando modo demo.")
         identificador = None
 
 
@@ -356,8 +356,8 @@ def api_health():
 def inicializar_app():
     """Inicializa todos los componentes de la aplicación."""
     print("\n" + "="*60)
-    print("  🌳 OSINFOR - Sistema de Verificación Forestal")
-    print("  Chatbot de Identificación de Árboles")
+    print("  OSINFOR - Sistema de Verificacion Forestal")
+    print("  Chatbot de Identificacion de Arboles")
     print("="*60)
 
     # Inicializar base de datos
@@ -369,14 +369,15 @@ def inicializar_app():
     initialize_trazabilidad()
 
     # Inicializar identificador visual
-    print("[3/4] Configurando identificador de árboles...")
+    print("[3/4] Configurando identificador de arboles...")
     inicializar_identificador()
 
     # Mostrar estado
     print("[4/4] Servidor listo.\n")
-    print(f"  📊 Base de datos: {ROOT_DIR / 'database' / 'inventario_osinfor.db'}")
-    print(f"  🔑 API Gemini: {'✅ Configurada' if GEMINI_API_KEY and GEMINI_API_KEY != 'TU_API_KEY_AQUI' else '⚠️ No configurada (modo demo)'}")
-    print(f"  🌐 Interfaz web: http://localhost:5000")
+    print(f"  Base de datos: {ROOT_DIR / 'database' / 'inventario_osinfor.db'}")
+    api_status = 'Configurada' if GEMINI_API_KEY and GEMINI_API_KEY != 'TU_API_KEY_AQUI' else 'No configurada (modo demo)'
+    print(f"  API Gemini: {api_status}")
+    print(f"  Interfaz web: http://localhost:5000")
     print("="*60 + "\n")
 
 
