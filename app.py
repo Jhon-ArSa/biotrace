@@ -21,6 +21,12 @@ load_dotenv()
 
 # Importar módulos del proyecto
 from database.db_manager import initialize_database, obtener_estadisticas
+from database.trazabilidad_manager import (
+    initialize_trazabilidad, login_usuario, crear_censo_trozo,
+    obtener_censos_titular, obtener_trozo_por_codigo, verificar_legalidad_trozo,
+    registrar_guia_transporte, obtener_guias_chofer, registrar_recepcion_centro,
+    obtener_recepciones_centro, get_dashboard_stats
+)
 from chatbot.motor_chatbot import ChatbotOsinfor
 
 # Inicializar la aplicación Flask
@@ -60,8 +66,163 @@ def inicializar_identificador():
 
 @app.route('/')
 def index():
-    """Página principal del chatbot."""
+    """Página principal — redirige al sistema de trazabilidad."""
+    return render_template('trazabilidad.html')
+
+
+@app.route('/chatbot')
+def chatbot_page():
+    """Página del chatbot original."""
     return render_template('index.html')
+
+
+# ============================================================
+# API TRAZABILIDAD — 3 ROLES DE USUARIO
+# ============================================================
+
+@app.route('/api/traz/login', methods=['POST'])
+def traz_login():
+    data = request.get_json()
+    usuario = login_usuario(data.get('email',''), data.get('password',''))
+    if usuario:
+        usuario.pop('password_hash', None)
+        return jsonify({'success': True, 'usuario': usuario})
+    return jsonify({'success': False, 'error': 'Email o contraseña incorrectos'}), 401
+
+
+@app.route('/api/traz/censo', methods=['POST'])
+def traz_censo():
+    """Dueño de título: registra un nuevo trozo y genera código único."""
+    try:
+        foto_corte_path = ''
+        foto_troza_path = ''
+        uploads = ROOT_DIR / 'uploads'
+        if 'foto_corte' in request.files:
+            f = request.files['foto_corte']
+            if f.filename:
+                p = uploads / f"corte_{f.filename}"
+                f.save(str(p))
+                foto_corte_path = str(p)
+        if 'foto_troza' in request.files:
+            f = request.files['foto_troza']
+            if f.filename:
+                p = uploads / f"troza_{f.filename}"
+                f.save(str(p))
+                foto_troza_path = str(p)
+
+        plan = request.form.get('plan_manejo', '')
+        region = plan.split('-')[2] if plan and len(plan.split('-')) > 2 else 'LOT'
+        res = crear_censo_trozo(
+            titular_id=int(request.form.get('titular_id', 1)),
+            numero_parcela=request.form.get('numero_parcela', ''),
+            especie=request.form.get('especie', ''),
+            nombre_cientifico=request.form.get('nombre_cientifico', ''),
+            latitud=float(request.form.get('latitud', 0) or 0),
+            longitud=float(request.form.get('longitud', 0) or 0),
+            dap_cm=float(request.form.get('dap_cm', 0) or 0),
+            longitud_troza=float(request.form.get('longitud_troza', 0) or 0),
+            volumen_m3=float(request.form.get('volumen_m3', 0) or 0),
+            foto_corte_path=foto_corte_path,
+            foto_troza_path=foto_troza_path,
+            plan_manejo=plan,
+            observaciones=request.form.get('observaciones', ''),
+            region=region[:3].upper() if region else 'LOT'
+        )
+        return jsonify(res)
+    except Exception as e:
+        import traceback; traceback.print_exc()
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@app.route('/api/traz/trozos/<int:titular_id>')
+def traz_trozos(titular_id):
+    trozos = obtener_censos_titular(titular_id)
+    return jsonify({'success': True, 'trozos': trozos})
+
+
+@app.route('/api/traz/trozo/<codigo>')
+def traz_trozo(codigo):
+    t = obtener_trozo_por_codigo(codigo)
+    if t:
+        return jsonify({'success': True, 'trozo': t})
+    return jsonify({'success': False, 'error': 'No encontrado'}), 404
+
+
+@app.route('/api/traz/trozo-by-id/<int:trozo_id>')
+def traz_trozo_by_id(trozo_id):
+    from database.trazabilidad_manager import get_connection
+    conn = get_connection()
+    try:
+        row = conn.execute('SELECT * FROM censos_trozo WHERE id=?', (trozo_id,)).fetchone()
+        if row:
+            return jsonify({'success': True, 'trozo': dict(row)})
+        return jsonify({'success': False, 'error': 'No encontrado'}), 404
+    finally:
+        conn.close()
+
+
+@app.route('/api/traz/verificar/<codigo>')
+def traz_verificar(codigo):
+    verificacion = verificar_legalidad_trozo(codigo)
+    return jsonify({'success': True, 'verificacion': verificacion})
+
+
+@app.route('/api/traz/guia', methods=['POST'])
+def traz_guia():
+    data = request.get_json()
+    trozo = obtener_trozo_por_codigo(data.get('codigo_trozo',''))
+    if not trozo:
+        return jsonify({'success': False, 'error': 'Código de trozo no encontrado'}), 404
+    res = registrar_guia_transporte(
+        censo_id=trozo['id'],
+        chofer_id=int(data.get('chofer_id', 1)),
+        placa=data.get('placa', 'S/P'),
+        origen=data.get('origen', ''),
+        destino=data.get('destino', ''),
+        observaciones=data.get('observaciones', '')
+    )
+    return jsonify(res)
+
+
+@app.route('/api/traz/guias/<int:chofer_id>')
+def traz_guias(chofer_id):
+    guias = obtener_guias_chofer(chofer_id)
+    return jsonify({'success': True, 'guias': guias})
+
+
+@app.route('/api/traz/recepcion', methods=['POST'])
+def traz_recepcion():
+    try:
+        foto_path = ''
+        if 'foto_corteza' in request.files:
+            f = request.files['foto_corteza']
+            if f.filename:
+                p = ROOT_DIR / 'uploads' / f"corteza_{f.filename}"
+                f.save(str(p))
+                foto_path = str(p)
+        res = registrar_recepcion_centro(
+            centro_id=int(request.form.get('centro_id', 1)),
+            codigo_trozo=request.form.get('codigo_trozo', ''),
+            foto_corteza_path=foto_path,
+            observaciones=request.form.get('observaciones', '')
+        )
+        return jsonify(res)
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
+@app.route('/api/traz/pedidos/<int:centro_id>')
+def traz_pedidos(centro_id):
+    pedidos = obtener_recepciones_centro(centro_id)
+    return jsonify({'success': True, 'pedidos': pedidos})
+
+
+@app.route('/api/traz/stats')
+def traz_stats():
+    stats = get_dashboard_stats()
+    stats_osinfor = obtener_estadisticas()
+    stats.update(stats_osinfor)
+    return jsonify({'success': True, 'stats': stats})
 
 
 @app.route('/static/<path:filename>')
@@ -194,15 +355,19 @@ def inicializar_app():
     print("="*60)
 
     # Inicializar base de datos
-    print("\n[1/3] Inicializando base de datos...")
+    print("\n[1/4] Inicializando base de datos inventario...")
     initialize_database()
 
+    # Inicializar tablas de trazabilidad
+    print("[2/4] Inicializando base de datos de trazabilidad...")
+    initialize_trazabilidad()
+
     # Inicializar identificador visual
-    print("[2/3] Configurando identificador de árboles...")
+    print("[3/4] Configurando identificador de árboles...")
     inicializar_identificador()
 
     # Mostrar estado
-    print("[3/3] Servidor listo.\n")
+    print("[4/4] Servidor listo.\n")
     print(f"  📊 Base de datos: {ROOT_DIR / 'database' / 'inventario_osinfor.db'}")
     print(f"  🔑 API Gemini: {'✅ Configurada' if GEMINI_API_KEY and GEMINI_API_KEY != 'TU_API_KEY_AQUI' else '⚠️ No configurada (modo demo)'}")
     print(f"  🌐 Interfaz web: http://localhost:5000")
