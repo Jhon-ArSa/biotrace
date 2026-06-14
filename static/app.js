@@ -3,6 +3,8 @@
    =================================================== */
 
 let imagenSeleccionada = null;
+let archivoSeleccionado = null;
+let tipoArchivo = null; // 'imagen' o 'documento'
 
 // ---- INICIALIZACIÓN ----
 document.addEventListener('DOMContentLoaded', async () => {
@@ -62,6 +64,7 @@ function agregarMensajeBienvenida(stats, apiActiva) {
           <br/>💬 <strong>Responder tus preguntas</strong> sobre especies forestales, trazabilidad y conservación
           <br/>📷 <strong>Identificar árboles</strong> mediante fotos y verificar si están en el 
           <strong>inventario forestal</strong> y <strong>planes de manejo vigentes</strong>
+          <br/>📄 <strong>Leer documentos</strong> (PDF, DOCX, imágenes con texto) y responder preguntas sobre ellos
           <br/><br/>
           📊 Estado del inventario:
           <span class="stat-inline"> ${stats.total_arboles ?? 0} árboles</span> ·
@@ -72,7 +75,7 @@ function agregarMensajeBienvenida(stats, apiActiva) {
           ${apiActiva
             ? '✅ IA activada — Identificación real y conversación habilitadas.'
             : '⚠️ Modo demo activo — Configure XAI_API_KEY (Grok) o GEMINI_API_KEY para funcionalidad completa.'}
-          <br/>💬 Pregúntame lo que quieras o 📷 sube una foto para identificar un árbol.
+          <br/>💬 Pregúntame lo que quieras, 📷 sube una foto de árbol, o 📄 sube un documento para analizar.
         </div>
       </div>
     </div>`;
@@ -144,7 +147,7 @@ function configurarUploadZone() {
   });
 
   fileInput.addEventListener('change', (e) => {
-    if (e.target.files[0]) mostrarPreview(e.target.files[0]);
+    if (e.target.files[0]) procesarArchivo(e.target.files[0]);
   });
 
   // Drag & Drop
@@ -154,27 +157,103 @@ function configurarUploadZone() {
     e.preventDefault();
     zone.classList.remove('drag-over');
     const file = e.dataTransfer.files[0];
-    if (file && file.type.startsWith('image/')) mostrarPreview(file);
-    else mostrarToast('⚠️ Por favor sube solo imágenes.', 'warning');
+    if (file) procesarArchivo(file);
   });
 }
 
-function mostrarPreview(file) {
-  imagenSeleccionada = file;
+function procesarArchivo(file) {
+  const ext = file.name.split('.').pop().toLowerCase();
+  const imageExts = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp'];
+  const docExts = ['pdf', 'docx', 'doc', 'txt', 'md'];
+  
+  if (imageExts.includes(ext) || file.type.startsWith('image/')) {
+    tipoArchivo = 'imagen';
+    imagenSeleccionada = file;
+    archivoSeleccionado = file;
+    mostrarPreviewImagen(file);
+  } else if (docExts.includes(ext)) {
+    tipoArchivo = 'documento';
+    archivoSeleccionado = file;
+    imagenSeleccionada = null;
+    mostrarPreviewDocumento(file);
+  } else {
+    mostrarToast('⚠️ Formato no soportado. Usa imágenes (JPG, PNG) o documentos (PDF, DOCX, TXT).', 'warning');
+  }
+}
+
+function mostrarPreviewImagen(file) {
   const reader = new FileReader();
   reader.onload = (e) => {
     document.getElementById('preview-img').src = e.target.result;
     document.getElementById('upload-content').style.display = 'none';
     document.getElementById('upload-preview').style.display = 'flex';
+    
+    // Actualizar botón para identificación de árbol
+    const btnVerify = document.getElementById('btn-verify');
+    btnVerify.innerHTML = '<span class="btn-icon">🔍</span> Verificar en inventario';
+    btnVerify.onclick = verificarArbol;
   };
   reader.readAsDataURL(file);
 }
 
+function mostrarPreviewDocumento(file) {
+  const ext = file.name.split('.').pop().toLowerCase();
+  const iconMap = {
+    'pdf': '📕',
+    'docx': '📘',
+    'doc': '📘',
+    'txt': '📄',
+    'md': '📝'
+  };
+  const icon = iconMap[ext] || '📄';
+  
+  document.getElementById('preview-img').src = '';
+  document.getElementById('preview-img').style.display = 'none';
+  
+  // Crear preview personalizado para documentos
+  const preview = document.getElementById('upload-preview');
+  preview.innerHTML = `
+    <div style="text-align: center; padding: 20px;">
+      <div style="font-size: 64px; margin-bottom: 10px;">${icon}</div>
+      <div style="font-size: 14px; font-weight: 600; margin-bottom: 5px;">${file.name}</div>
+      <div style="font-size: 12px; color: var(--text-muted);">${(file.size / 1024).toFixed(1)} KB</div>
+    </div>
+    <div class="preview-actions">
+      <button class="btn-verify" id="btn-verify" onclick="procesarDocumento()">
+        <span class="btn-icon">📖</span>
+        Leer documento
+      </button>
+      <button class="btn-cancel" onclick="cancelarImagen()">✕ Cancelar</button>
+    </div>
+  `;
+  
+  document.getElementById('upload-content').style.display = 'none';
+  preview.style.display = 'flex';
+}
+
 function cancelarImagen() {
   imagenSeleccionada = null;
+  archivoSeleccionado = null;
+  tipoArchivo = null;
   document.getElementById('file-input').value = '';
   document.getElementById('upload-content').style.display = 'block';
-  document.getElementById('upload-preview').style.display = 'none';
+  
+  const preview = document.getElementById('upload-preview');
+  preview.style.display = 'none';
+  
+  // Restaurar preview de imagen
+  const previewImg = document.getElementById('preview-img');
+  previewImg.style.display = 'block';
+  preview.innerHTML = `
+    <img id="preview-img" src="" alt="Vista previa" />
+    <div class="preview-actions">
+      <button class="btn-verify" id="btn-verify" onclick="verificarArbol()">
+        <span class="btn-icon">🔍</span>
+        Verificar en inventario
+      </button>
+      <button class="btn-cancel" onclick="cancelarImagen()">✕ Cancelar</button>
+    </div>
+  `;
 }
 
 // ---- VERIFICACIÓN PRINCIPAL ----
@@ -438,6 +517,95 @@ function agregarMensajeUsuarioTexto(texto) {
   div.className = 'msg msg-user';
   div.innerHTML = `
     <div class="msg-bubble">${texto}</div>
+    <div class="msg-avatar">👤</div>`;
+  msgs.appendChild(div);
+  scrollChat();
+}
+
+// ---- PROCESAMIENTO DE DOCUMENTOS ----
+async function procesarDocumento() {
+  if (!archivoSeleccionado) return;
+
+  const btnVerify = document.getElementById('btn-verify');
+  
+  // Mensaje del usuario en el chat
+  agregarMensajeUsuarioDocumento(archivoSeleccionado.name);
+
+  // Mostrar indicador de procesamiento
+  const typingId = mostrarTyping();
+
+  btnVerify.disabled = true;
+  btnVerify.innerHTML = '<span class="spinner"></span> Procesando...';
+
+  try {
+    const formData = new FormData();
+    formData.append('documento', archivoSeleccionado);
+
+    const res = await fetch('/api/procesar-documento', { method: 'POST', body: formData });
+    const json = await res.json();
+
+    quitarTyping(typingId);
+
+    if (!json.success) {
+      agregarMensajeBot(`❌ Error: ${json.error}`);
+      mostrarToast('Error al procesar el documento.', 'error');
+      return;
+    }
+
+    const data = json.data;
+
+    // Mostrar resultado del documento procesado
+    if (data.tipo === 'documento_procesado' || data.tipo === 'documento_consultado') {
+      let mensaje = `✅ <strong>Documento procesado exitosamente</strong><br/><br/>`;
+      
+      if (data.estadisticas) {
+        const stats = data.estadisticas;
+        mensaje += `📄 <strong>${stats.archivo}</strong><br/>`;
+        mensaje += `📊 ${stats.palabras} palabras · ${stats.caracteres} caracteres<br/><br/>`;
+      }
+      
+      if (data.respuesta) {
+        // Si hay una consulta sobre el documento
+        mensaje += `<div style="background:var(--bg-card);padding:12px;border-radius:8px;margin-top:8px;">`;
+        mensaje += data.respuesta.replace(/\n/g, '<br/>');
+        mensaje += `</div>`;
+      } else if (data.texto) {
+        // Mostrar primeros 500 caracteres del texto extraído
+        const textoMostrar = data.texto.substring(0, 500);
+        mensaje += `<div style="background:var(--bg-card);padding:12px;border-radius:8px;margin-top:8px;font-size:12px;color:var(--text-muted);">`;
+        mensaje += `<strong>Contenido extraído (primeros 500 caracteres):</strong><br/><br/>`;
+        mensaje += textoMostrar.replace(/\n/g, '<br/>');
+        if (data.texto.length > 500) mensaje += '<br/><br/><em>... (texto truncado)</em>';
+        mensaje += `</div><br/>`;
+        mensaje += `💬 <em>Ahora puedes hacerme preguntas sobre este documento</em>`;
+      }
+      
+      agregarMensajeBot(mensaje);
+      mostrarToast('✅ Documento procesado correctamente', 'success');
+    } else if (data.tipo === 'error') {
+      agregarMensajeBot(`❌ ${data.mensaje}`);
+      mostrarToast(data.mensaje, 'error');
+    }
+
+  } catch (e) {
+    quitarTyping(typingId);
+    agregarMensajeBot('❌ Error de conexión. Verifica que el servidor esté activo.');
+    mostrarToast('Error de conexión.', 'error');
+  } finally {
+    btnVerify.disabled = false;
+    btnVerify.innerHTML = '<span class="btn-icon">📖</span> Leer documento';
+    cancelarImagen();
+  }
+}
+
+function agregarMensajeUsuarioDocumento(nombreArchivo) {
+  const msgs = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'msg msg-user';
+  div.innerHTML = `
+    <div class="msg-bubble">
+      📎 Procesando documento: <strong>${nombreArchivo}</strong>
+    </div>
     <div class="msg-avatar">👤</div>`;
   msgs.appendChild(div);
   scrollChat();
