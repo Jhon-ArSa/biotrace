@@ -25,7 +25,7 @@ def insertar_datos_prueba():
                 ('Pedro Quispe', 'chofer@biotrace.com', 'chofer2026', 'chofer', NULL, 'Transportes Selva SAC', '87654321', 'ABC-123'),
                 ('Centro Loreto', 'centro@biotrace.com', 'centro2026', 'centro_transformacion', NULL, 'Centro de Transformación Loreto S.A.', '11223344', NULL)
             """)
-            print("✓ Usuarios creados")
+            print("[OK] Usuarios creados")
         else:
             print("[Setup] Usuarios ya existen")
         
@@ -53,7 +53,7 @@ def insertar_datos_prueba():
                  '-12.589,-70.123', -12.589, -70.123, 95.0, 7.2, 4.11, 
                  'REGISTRADO', 'PM-2024-MDD-001', 0, datetime('now'))
             """)
-            print("✓ Trozos creados")
+            print("[OK] Trozos creados")
         else:
             print("[Setup] Trozos ya existen")
         
@@ -103,21 +103,21 @@ def insertar_datos_prueba():
                             VALUES (?, ?, ?, ?, ?)
                         """, cp[:5])
                 
-                print("✓ Checkpoints creados")
+                print("[OK] Checkpoints creados")
         else:
-            print("[Setup] Guías ya existen")
+            print("[Setup] Guias ya existen")
         
         conn.commit()
-        print("\n✅ Datos de prueba insertados correctamente")
-        print("\n📋 Credenciales de acceso:")
+        print("\n[OK] Datos de prueba insertados correctamente")
+        print("\n[CREDENCIALES] Credenciales de acceso:")
         print("   Titular: titular@biotrace.com / titular2026")
         print("   Chofer:  chofer@biotrace.com / chofer2026")
         print("   Centro:  centro@biotrace.com / centro2026")
-        print("\n🔗 URL de prueba para tracking:")
+        print("\n[URL] URL de prueba para tracking:")
         print("   http://localhost:5000/biotrace/pages/tracking_ruta.html?codigo=TRZ-2026-LOR-001")
         
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"[ERROR] Error: {e}")
         import traceback
         traceback.print_exc()
     finally:
