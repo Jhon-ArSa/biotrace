@@ -35,6 +35,8 @@ class ChatbotOsinfor:
         self.modelo_conversacion = None
         self.chat_session = None
         self.proveedor_ia = None
+        self.ultimo_documento = None  # Guardar el último documento procesado
+        self.ultimo_documento_nombre = None  # Nombre del archivo
         
         # Intentar inicializar con Groq primero, luego Grok, luego Gemini
         groq_key = os.getenv("GROQ_API_KEY", "")
@@ -381,6 +383,10 @@ ESTILO:
             palabras = len(texto_extraido.split())
             caracteres = len(texto_extraido)
             
+            # GUARDAR EN MEMORIA para preguntas posteriores
+            self.ultimo_documento = texto_extraido
+            self.ultimo_documento_nombre = os.path.basename(filepath)
+            
             return {
                 "tipo": "documento_procesado",
                 "exito": True,
@@ -524,20 +530,42 @@ Responde de forma clara y concisa basándote en el contenido del documento."""
             }
         
         try:
+            # Si hay un documento en memoria, agregar su contexto al mensaje
+            mensaje_con_contexto = mensaje
+            if self.ultimo_documento:
+                # Truncar documento a 3500 caracteres para no exceder límites
+                doc_truncado = self.ultimo_documento[:3500]
+                if len(self.ultimo_documento) > 3500:
+                    doc_truncado += "\n...(documento truncado por longitud)"
+                
+                mensaje_con_contexto = f"""Tengo en mi contexto el siguiente documento que el usuario acaba de subir:
+
+ARCHIVO: {self.ultimo_documento_nombre}
+
+CONTENIDO DEL DOCUMENTO:
+{doc_truncado}
+
+---
+
+PREGUNTA DEL USUARIO:
+{mensaje}
+
+Por favor, responde la pregunta del usuario basándote EXCLUSIVAMENTE en el contenido del documento anterior. Si la pregunta es sobre el documento, analízalo y responde con información específica de él. Si no encuentras la información en el documento, dilo claramente."""
+            
             # Generar respuesta según el proveedor
             if self.proveedor_ia == "groq":
                 # Usar Groq (ChatbotGroq tiene su propio manejo de historial)
-                respuesta_texto = self.modelo_conversacion.enviar_mensaje(mensaje)
+                respuesta_texto = self.modelo_conversacion.enviar_mensaje(mensaje_con_contexto)
             
             elif self.proveedor_ia == "grok":
                 # Usar Grok (ChatbotGrok tiene su propio manejo de historial)
-                respuesta_texto = self.modelo_conversacion.enviar_mensaje(mensaje)
+                respuesta_texto = self.modelo_conversacion.enviar_mensaje(mensaje_con_contexto)
             
             elif self.proveedor_ia == "gemini":
                 # Usar Gemini
                 if not self.chat_session:
                     self.chat_session = self.modelo_conversacion.start_chat(history=[])
-                response = self.chat_session.send_message(mensaje)
+                response = self.chat_session.send_message(mensaje_con_contexto)
                 respuesta_texto = response.text
             
             else:
