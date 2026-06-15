@@ -667,18 +667,277 @@ a {
     background: rgba(255, 255, 255, 0.38);
 }
 
-@media (max-width: 380px) {
+/* ===== RESPONSIVE DESIGN ===== */
+
+/* Mobile First - Base styles are for mobile */
+
+/* Small Mobile (320px - 480px) */
+@media (max-width: 480px) {
+    html, body {
+        font-size: 14px;
+    }
+    
     .screen {
-        padding: 28px 16px 24px;
+        padding: 20px 12px 16px;
+        max-width: 100%;
     }
-    .logo-text {
-        font-size: 18px;
+    
+    .logo-row {
+        gap: 10px;
+        margin-bottom: 20px;
     }
-    .welcome-title {
+    
+    .logo-icon {
+        width: 48px;
+        height: 48px;
         font-size: 24px;
     }
+    
+    .logo-text {
+        font-size: 16px;
+    }
+    
+    .logo-sub {
+        font-size: 9px;
+    }
+    
+    .welcome-title {
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+    
+    .section-title {
+        font-size: 20px;
+    }
+    
+    .section-title.big {
+        font-size: 26px;
+    }
+    
+    .section-subtitle {
+        font-size: 16px;
+    }
+    
     .btn {
+        font-size: 14px;
+        padding: 14px 16px;
+    }
+    
+    .btn-dark-teal,
+    .btn-teal,
+    .btn-gps {
+        font-size: 14px;
+        padding: 12px 16px;
+    }
+    
+    .input-field,
+    .input-field-dark {
+        font-size: 14px;
+        padding: 12px 14px;
+    }
+    
+    .field-label {
         font-size: 15px;
-        padding: 16px;
+    }
+    
+    .qr-title {
+        font-size: 22px;
+        margin-bottom: 24px;
+    }
+    
+    .qr-image {
+        width: 180px;
+        height: 180px;
+    }
+    
+    .troza-summary {
+        padding: 12px 16px;
+        font-size: 13px;
+    }
+    
+    .info-label {
+        font-size: 13px;
+        min-width: 80px;
+    }
+    
+    .info-input {
+        font-size: 13px;
+    }
+    
+    .process-q-text {
+        font-size: 22px;
+    }
+    
+    .qr-illustration {
+        font-size: 48px;
+    }
+    
+    .qr-reader-box {
+        max-width: 100%;
+        min-height: 240px;
+    }
+    
+    .demo-box {
+        padding: 12px 14px;
+    }
+    
+    .demo-title {
+        font-size: 13px;
+    }
+    
+    .demo-row {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+    
+    .demo-label {
+        font-size: 11px;
+        min-width: 60px;
+    }
+    
+    .demo-value {
+        font-size: 12px;
+        flex: 1 1 100%;
+    }
+}
+
+/* Mobile Landscape & Tablets (481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+    .screen {
+        padding: 32px 20px 24px;
+        max-width: 600px;
+    }
+    
+    .logo-icon {
+        width: 100px;
+        height: 76px;
+        font-size: 26px;
+    }
+    
+    .logo-text {
+        font-size: 20px;
+    }
+    
+    .welcome-title {
+        font-size: 28px;
+    }
+    
+    .section-title {
+        font-size: 22px;
+    }
+    
+    .qr-image {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+/* Tablets (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .screen {
+        max-width: 720px;
+        padding: 40px 28px 32px;
+    }
+    
+    .welcome-title {
+        font-size: 32px;
+    }
+    
+    .section-title.big {
+        font-size: 36px;
+    }
+    
+    .btn {
+        font-size: 18px;
+        padding: 20px 24px;
+    }
+    
+    .qr-image {
+        width: 240px;
+        height: 240px;
+    }
+}
+
+/* Desktop (1025px+) */
+@media (min-width: 1025px) {
+    .screen {
+        max-width: 800px;
+    }
+    
+    .btn:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+        transition: all 0.2s;
+    }
+    
+    .btn-dark-teal:hover,
+    .btn-teal:hover,
+    .btn-outline-dark:hover,
+    .btn-outline-teal:hover {
+        opacity: 0.9;
+        transform: translateY(-2px);
+    }
+    
+    .photo-upload:hover {
+        opacity: 0.95;
+        border: 2px solid #1E3A3A;
+    }
+}
+
+/* Extra Wide Screens (1400px+) */
+@media (min-width: 1400px) {
+    .screen {
+        max-width: 1000px;
+    }
+}
+
+/* Orientation: Landscape on mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+    .screen {
+        padding: 16px 12px;
+    }
+    
+    .welcome-title {
+        font-size: 20px;
+        margin-bottom: 16px;
+    }
+    
+    .logo-row {
+        margin-bottom: 16px;
+    }
+    
+    .btn {
+        padding: 12px 16px;
+    }
+}
+
+/* High DPI / Retina Displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .qr-image {
+        image-rendering: -webkit-optimize-contrast;
+    }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .btn,
+    .btn-dark,
+    .btn-dark-teal,
+    .btn-light,
+    .btn-outline-dark,
+    .btn-outline-teal,
+    .btn-teal,
+    .btn-gps {
+        min-height: 44px;
+        padding: 16px 20px;
+    }
+    
+    .input-field,
+    .input-field-dark {
+        min-height: 44px;
+    }
+    
+    .photo-upload {
+        min-height: 140px;
     }
 }

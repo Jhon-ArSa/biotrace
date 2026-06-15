@@ -216,6 +216,119 @@
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
+    
+    /* Additional Mobile Optimizations */
+    @media (max-width: 480px) {
+      .container {
+        padding: 10px;
+      }
+      
+      .header {
+        padding: 16px 12px;
+        border-radius: 10px;
+        margin-bottom: 12px;
+      }
+      
+      .header h1 {
+        font-size: 18px;
+      }
+      
+      .header p {
+        font-size: 12px;
+      }
+      
+      .checkpoint-card {
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+      }
+      
+      .checkpoint-number {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+      }
+      
+      .checkpoint-name {
+        font-size: 14px;
+      }
+      
+      .checkpoint-status {
+        font-size: 11px;
+      }
+      
+      .checkpoint-time {
+        font-size: 10px;
+      }
+      
+      .checkpoint-actions {
+        gap: 6px;
+        margin-top: 10px;
+      }
+      
+      .btn-action {
+        padding: 8px;
+        font-size: 12px;
+      }
+      
+      .progress-bar {
+        height: 6px;
+        margin: 12px 0;
+      }
+      
+      .progress-text {
+        font-size: 12px;
+      }
+      
+      .btn-back {
+        padding: 10px;
+        font-size: 13px;
+        margin-top: 12px;
+      }
+      
+      .alert {
+        padding: 10px;
+        font-size: 12px;
+        margin-bottom: 12px;
+      }
+    }
+    
+    @media (max-width: 380px) {
+      .header h1 {
+        font-size: 16px;
+      }
+      
+      .checkpoint-number {
+        width: 32px;
+        height: 32px;
+        font-size: 14px;
+      }
+      
+      .checkpoint-name {
+        font-size: 13px;
+      }
+      
+      .btn-action {
+        font-size: 11px;
+      }
+    }
+    
+    /* Landscape orientation for mobile */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .container {
+        padding: 8px;
+      }
+      
+      .header {
+        padding: 12px 10px;
+        margin-bottom: 8px;
+      }
+      
+      .checkpoint-card {
+        padding: 10px;
+        margin-bottom: 8px;
+      }
+    }
   </style>
 </head>
 <body>

@@ -175,6 +175,96 @@
       border-bottom: none;
     }
 
+    /* Responsive Improvements */
+    @media (max-width: 900px) {
+      .comparison-container {
+        padding: 16px;
+      }
+      
+      .images-comparison {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      
+      .image-box img {
+        height: 200px;
+      }
+    }
+    
+    @media (max-width: 640px) {
+      .comparison-container {
+        padding: 12px;
+      }
+      
+      .module-title {
+        font-size: 16px !important;
+      }
+      
+      .field-label {
+        font-size: 14px !important;
+      }
+      
+      .result-title {
+        font-size: 20px;
+      }
+      
+      .result-subtitle {
+        font-size: 13px;
+      }
+      
+      .result-header {
+        padding: 16px;
+      }
+      
+      .image-box {
+        padding: 10px;
+      }
+      
+      .image-box img {
+        height: 160px;
+      }
+      
+      .similarity-section {
+        padding: 16px;
+      }
+      
+      .similarity-label {
+        font-size: 13px;
+      }
+      
+      .similarity-value {
+        font-size: 16px;
+      }
+      
+      .message-box {
+        padding: 12px;
+        font-size: 13px;
+      }
+      
+      .metrics-details {
+        padding: 12px;
+        font-size: 12px;
+      }
+      
+      .metric-item {
+        font-size: 12px;
+      }
+    }
+    
+    @media (max-width: 380px) {
+      .result-title {
+        font-size: 18px;
+      }
+      
+      .image-box img {
+        height: 140px;
+      }
+      
+      .similarity-section {
+        padding: 12px;
+      }
+    }
+    
     @media (max-width: 768px) {
       .images-comparison {
         grid-template-columns: 1fr;

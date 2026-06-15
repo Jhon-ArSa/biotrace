@@ -2,17 +2,165 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#1BC05A">
     <title>Bio Trace Labs – Login</title>
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* Login page mejorado con logo */
+        .logo-brand {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        
+        .logo-brand img {
+            width: 120px;
+            height: auto;
+            margin: 0 auto 12px auto;
+            border: none;
+            outline: none;
+            display: block;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.15));
+        }
+        
+        .logo-brand-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #1E3A3A;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+        
+        .logo-brand-subtitle {
+            font-size: 11px;
+            color: #6b7280;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        /* Responsive Login Page */
+        @media (max-width: 640px) {
+            .logo-brand img {
+                width: 100px;
+            }
+            
+            .logo-brand-title {
+                font-size: 18px;
+            }
+            
+            .logo-brand-subtitle {
+                font-size: 10px;
+            }
+            
+            .logo-row {
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+            
+            .logo-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 24px;
+            }
+            
+            .logo-text {
+                font-size: 18px;
+            }
+            
+            .welcome-title {
+                font-size: 24px;
+                margin-bottom: 20px;
+            }
+            
+            .login-form {
+                gap: 12px;
+                margin-bottom: 12px;
+            }
+            
+            .input-field {
+                font-size: 15px;
+                padding: 14px 16px;
+            }
+            
+            .btn {
+                font-size: 15px;
+                padding: 16px;
+            }
+            
+            .demo-box {
+                padding: 14px 16px;
+                margin-top: 20px;
+            }
+            
+            .demo-title {
+                font-size: 13px;
+                margin-bottom: 10px;
+            }
+            
+            .demo-row {
+                gap: 6px;
+                margin-bottom: 6px;
+            }
+            
+            .demo-label {
+                font-size: 11px;
+                min-width: 60px;
+            }
+            
+            .demo-value {
+                font-size: 12px;
+            }
+            
+            .demo-copy {
+                font-size: 10px;
+                padding: 3px 8px;
+            }
+            
+            .demo-fill {
+                font-size: 12px;
+                padding: 8px;
+            }
+        }
+        
+        @media (max-width: 380px) {
+            .logo-icon {
+                width: 44px;
+                height: 44px;
+                font-size: 20px;
+            }
+            
+            .logo-text {
+                font-size: 16px;
+            }
+            
+            .welcome-title {
+                font-size: 20px;
+            }
+            
+            .input-field {
+                font-size: 14px;
+                padding: 12px 14px;
+            }
+            
+            .btn {
+                font-size: 14px;
+                padding: 14px;
+            }
+            
+            .demo-box {
+                padding: 12px 14px;
+            }
+        }
+    </style>
 </head>
 <body class="green-bg">
     <div class="screen">
-        <div class="logo-row">
-            <div class="logo-icon">S</div>
-            <span class="logo-text">BIO TRACE LABS</span>
+        <div class="logo-brand">
+            <img src="../logo/logo_app_sinfondo1.png" alt="BioTrace Labs">
+            <div class="logo-brand-title"></div>
+            <div class="logo-brand-subtitle">Trazabilidad Forestal</div>
         </div>
-        <h2 class="welcome-title">Bienvenido</h2>
+        <h2 class="welcome-title">Iniciar Sesión</h2>
         <div id="alertBox" class="alert" style="display:none"></div>
         <div class="login-form">
             <input type="text" id="roleDisplay" class="input-field" readonly>

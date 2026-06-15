@@ -13,10 +13,25 @@
       border-radius: 16px;
       margin-bottom: 24px;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .header-logo {
+      width: 50px;
+      height: auto;
+      margin: 0 auto;
+      border: none;
+      outline: none;
+      display: block;
+      filter: brightness(0) invert(1);
+      opacity: 0.95;
     }
     
     .header-banner h1 {
-      margin: 0 0 8px 0;
+      margin: 0;
       font-size: 28px;
       font-weight: 700;
     }
@@ -56,11 +71,61 @@
       width: 50%;
       transition: width 0.3s ease;
     }
+    
+    /* Responsive */
+    @media (max-width: 640px) {
+      .header-banner {
+        padding: 16px;
+        border-radius: 12px;
+        margin-bottom: 16px;
+      }
+      
+      .header-banner h1 {
+        font-size: 20px;
+      }
+      
+      .header-banner p {
+        font-size: 12px;
+      }
+      
+      .form-card {
+        padding: 20px 16px;
+        border-radius: 12px;
+      }
+      
+      .form-progress {
+        font-size: 12px;
+        margin-bottom: 16px;
+      }
+      
+      .section-title {
+        font-size: 18px !important;
+      }
+      
+      .section-subtitle {
+        font-size: 14px !important;
+      }
+    }
+    
+    @media (max-width: 380px) {
+      .header-banner {
+        padding: 12px;
+      }
+      
+      .header-banner h1 {
+        font-size: 18px;
+      }
+      
+      .form-card {
+        padding: 16px 12px;
+      }
+    }
   </style>
 </head>
 <body class="mint-bg">
   <div class="screen" style="max-width: 600px; margin: 0 auto;">
     <div class="header-banner">
+      <img src="../logo/logo_app_sinfondo1.png" alt="BioTrace" class="header-logo">
       <h1>🌳 Titular - Registro</h1>
       <p id="userName">BioTrace Sistema Forestal</p>
     </div>

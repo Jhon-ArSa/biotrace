@@ -37,10 +37,25 @@
       border-radius: 12px;
       margin-bottom: 15px;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .banner-logo {
+      width: 60px;
+      height: auto;
+      margin: 0 auto;
+      border: none;
+      outline: none;
+      display: block;
+      filter: brightness(0) invert(1);
+      opacity: 0.95;
     }
     
     .welcome-banner h1 {
-      margin: 0 0 8px 0;
+      margin: 0;
       font-size: 22px;
       font-weight: 700;
     }
@@ -48,6 +63,7 @@
     .welcome-banner p {
       margin: 0;
       font-size: 13px;
+      opacity: 0.9;
     }
     
     @media (min-width: 768px) {
@@ -344,11 +360,299 @@
       background: #f8d7da;
       color: #721c24;
     }
+    
+    /* Additional Responsive Improvements */
+    @media (max-width: 480px) {
+      .welcome-banner h1 {
+        font-size: 18px;
+      }
+      
+      .welcome-banner p {
+        font-size: 12px;
+      }
+      
+      .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+      }
+      
+      .stat-card {
+        padding: 10px 6px;
+      }
+      
+      .stat-number {
+        font-size: 20px;
+      }
+      
+      .stat-label {
+        font-size: 9px;
+      }
+      
+      .action-btn {
+        padding: 12px;
+        font-size: 13px;
+        margin-bottom: 10px;
+      }
+      
+      .section-title {
+        font-size: 20px;
+        margin: 20px 0 15px 0;
+      }
+      
+      .table-container {
+        padding: 12px;
+        border-radius: 10px;
+      }
+      
+      .data-table th {
+        padding: 8px 6px;
+        font-size: 10px;
+      }
+      
+      .data-table td {
+        padding: 8px 6px;
+        font-size: 11px;
+      }
+      
+      .badge {
+        padding: 3px 10px;
+        font-size: 10px;
+      }
+      
+      .btn-link {
+        font-size: 11px;
+      }
+      
+      .empty-state {
+        padding: 40px 15px;
+      }
+      
+      .empty-state-icon {
+        font-size: 48px;
+      }
+      
+      /* Modal responsive */
+      .modal-content {
+        margin: 10% auto;
+        padding: 20px;
+        max-width: 90%;
+      }
+      
+      .modal-title {
+        font-size: 20px;
+      }
+      
+      .form-label {
+        font-size: 13px;
+      }
+      
+      .form-input {
+        font-size: 14px;
+        padding: 10px;
+      }
+      
+      .btn-submit {
+        padding: 14px;
+        font-size: 15px;
+      }
+    }
+    
+    /* Cards para móvil */
+    .desktop-only {
+      display: block;
+    }
+    
+    .mobile-only {
+      display: none;
+    }
+    
+    @media (max-width: 768px) {
+      .desktop-only {
+        display: none !important;
+      }
+      
+      .mobile-only {
+        display: block !important;
+      }
+      
+      .cards-container {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      
+      .guia-card-mobile {
+        background: white;
+        border-radius: 12px;
+        padding: 16px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        border-left: 4px solid #1e3a8a;
+      }
+      
+      .guia-card-mobile.en-ruta {
+        border-left-color: #3b82f6;
+      }
+      
+      .guia-card-mobile.entregado {
+        border-left-color: #10b981;
+      }
+      
+      .card-header-mobile {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 12px;
+        gap: 8px;
+      }
+      
+      .card-codigo-mobile {
+        font-weight: 700;
+        font-size: 15px;
+        color: #1f2937;
+        word-break: break-all;
+        flex: 1;
+      }
+      
+      .card-badge-mobile {
+        flex-shrink: 0;
+      }
+      
+      .card-info-mobile {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 12px;
+      }
+      
+      .card-info-item-mobile {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      
+      .card-info-label-mobile {
+        font-size: 11px;
+        color: #6b7280;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      
+      .card-info-value-mobile {
+        font-size: 14px;
+        color: #1f2937;
+        font-weight: 600;
+      }
+      
+      .card-actions-mobile {
+        display: flex;
+        gap: 8px;
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid #e5e7eb;
+      }
+      
+      .card-btn-mobile {
+        flex: 1;
+        padding: 10px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        text-align: center;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      
+      .card-btn-primary-mobile {
+        background: #1e3a8a;
+        color: white;
+      }
+      
+      .card-btn-secondary-mobile {
+        background: #f3f4f6;
+        color: #374151;
+      }
+      
+      .card-btn-mobile:active {
+        transform: scale(0.95);
+      }
+    }
+    
+    /* Modal responsive en mobile */
+    @media (max-width: 640px) {
+      .modal-content {
+        width: 95%;
+        max-width: none;
+        margin: 5% auto;
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+      
+      .form-group {
+        margin-bottom: 14px;
+      }
+      
+      .form-input {
+        font-size: 14px;
+      }
+      
+      .btn-submit {
+        padding: 14px;
+        font-size: 14px;
+      }
+      
+      /* Mejorar section hint */
+      .section-hint {
+        display: block;
+        padding: 8px 12px;
+        background: #f0f9ff;
+        border-left: 3px solid #0ea5e9;
+        border-radius: 4px;
+        margin: -8px 0 16px 0 !important;
+      }
+      
+      /* Action button mejorado */
+      .action-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 16px;
+        font-size: 15px;
+      }
+      
+      /* Hint text responsive */
+      div[style*="text-align: center"] {
+        font-size: 12px !important;
+        padding: 8px 12px;
+        background: #f9fafb;
+        border-radius: 8px;
+        margin: 10px 0 !important;
+      }
+    }
+    
+    /* Extra pequeño */
+    @media (max-width: 380px) {
+      .section-hint {
+        font-size: 11px !important;
+      }
+      
+      .data-table {
+        font-size: 11px;
+      }
+      
+      .badge {
+        padding: 2px 6px;
+        font-size: 9px;
+      }
+    }
   </style>
 </head>
 <body class="mint-bg">
   <div class="dashboard-container">
     <div class="welcome-banner">
+      <img src="../logo/logo_app_sinfondo1.png" alt="BioTrace" class="banner-logo">
       <h1>🚛 Dashboard del Chofer</h1>
       <p id="userName">Bienvenido al Sistema BioTrace</p>
     </div>
@@ -375,8 +679,12 @@
       </div>
     
     <h2 class="section-title">📋 Mis Guías de Transporte</h2>
+    <p class="section-hint" style="font-size: 13px; color: #6b7280; margin: -12px 0 16px 0; text-align: center;">
+      💡 Desliza la tabla hacia los lados para ver todas las columnas
+    </p>
     
-    <div class="table-container">
+    <!-- Vista tabla desktop -->
+    <div class="table-container desktop-only">
       <table class="data-table" id="tablaGuias">
         <thead>
           <tr>
@@ -399,6 +707,14 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    
+    <!-- Vista cards móvil -->
+    <div class="cards-container mobile-only" id="guiasCards">
+      <div class="empty-state">
+        <div class="empty-state-icon">🚛</div>
+        <div>Cargando guías...</div>
+      </div>
     </div>
     
     <a href="../index.html" class="back-link" style="margin-top: 30px; display: inline-block;">← Salir</a>
@@ -486,10 +802,11 @@
         const result = await response.json();
         
         const tbody = document.getElementById('guiasBody');
+        const cardsContainer = document.getElementById('guiasCards');
         
         if (result.success && result.guias && result.guias.length > 0) {
+          // Vista tabla (desktop)
           tbody.innerHTML = result.guias.map(guia => {
-            // Determinar estado basado en el estado del trozo (por defecto EN_TRANSITO)
             const estado = guia.estado || 'EN_TRANSITO';
             const estadoBadge = estado === 'RECIBIDO' ? 
               '<span class="badge badge-success">Entregado</span>' :
@@ -512,6 +829,52 @@
               </tr>
             `;
           }).join('');
+          
+          // Vista cards (móvil)
+          cardsContainer.innerHTML = result.guias.map(guia => {
+            const estado = guia.estado || 'EN_TRANSITO';
+            const estadoBadge = estado === 'RECIBIDO' ? 
+              '<span class="badge badge-success">Entregado</span>' :
+              '<span class="badge badge-info">En Ruta</span>';
+            const estadoClass = estado === 'RECIBIDO' ? 'entregado' : 'en-ruta';
+            const fechaSalida = new Date(guia.fecha_salida).toLocaleDateString('es-PE');
+            
+            return `
+              <div class="guia-card-mobile ${estadoClass}">
+                <div class="card-header-mobile">
+                  <div class="card-codigo-mobile">${guia.numero_guia}</div>
+                  <div class="card-badge-mobile">${estadoBadge}</div>
+                </div>
+                <div class="card-info-mobile">
+                  <div class="card-info-item-mobile">
+                    <span class="card-info-label-mobile">Código Trozo</span>
+                    <span class="card-info-value-mobile">${guia.codigo_unico_trozo}</span>
+                  </div>
+                  <div class="card-info-item-mobile">
+                    <span class="card-info-label-mobile">Especie</span>
+                    <span class="card-info-value-mobile">${guia.especie}</span>
+                  </div>
+                  <div class="card-info-item-mobile">
+                    <span class="card-info-label-mobile">Origen</span>
+                    <span class="card-info-value-mobile">${guia.origen}</span>
+                  </div>
+                  <div class="card-info-item-mobile">
+                    <span class="card-info-label-mobile">Destino</span>
+                    <span class="card-info-value-mobile">${guia.destino}</span>
+                  </div>
+                </div>
+                <div class="card-info-item-mobile" style="grid-column: 1/-1; margin-top: 8px;">
+                  <span class="card-info-label-mobile">Fecha Salida</span>
+                  <span class="card-info-value-mobile">${fechaSalida}</span>
+                </div>
+                <div class="card-actions-mobile">
+                  <button class="card-btn-mobile card-btn-primary-mobile" onclick="verCheckpoints('${guia.numero_guia}', ${guia.id})">
+                    📍 Ver checkpoints
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('');
         } else {
           tbody.innerHTML = `
             <tr>
@@ -523,6 +886,14 @@
               </td>
             </tr>
           `;
+          cardsContainer.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">🚛</div>
+              <div>No hay guías registradas todavía.</div>
+              <br>
+              <button class="btn-link" onclick="abrirModalGuia()">Registrar primera guía</button>
+            </div>
+          `;
         }
       } catch (error) {
         console.error('Error al cargar guías:', error);
@@ -532,6 +903,11 @@
               <div style="color: #dc3545;">Error al cargar las guías</div>
             </td>
           </tr>
+        `;
+        document.getElementById('guiasCards').innerHTML = `
+          <div class="empty-state">
+            <div style="color: #dc3545;">Error al cargar las guías</div>
+          </div>
         `;
       }
     }

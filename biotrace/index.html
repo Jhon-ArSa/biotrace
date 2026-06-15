@@ -2,21 +2,288 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <meta name="description" content="BioTrace Labs - Sistema de Trazabilidad Forestal">
+  <meta name="theme-color" content="#1BC05A">
   <title>Bio Trace Labs</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Página principal mejorada con logo */
+    .main-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background: linear-gradient(135deg, #1BC05A 0%, #0d8a3f 100%);
+    }
+    
+    .logo-container {
+      text-align: center;
+      margin-bottom: 40px;
+      animation: fadeInDown 0.8s ease;
+    }
+    
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .logo-image {
+      width: 260px;
+      height: auto;
+      margin: 0 auto 20px auto;
+      border: none;
+      outline: none;
+      filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));
+      animation: float 3s ease-in-out infinite;
+      display: block;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .brand-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: white;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      margin-bottom: 8px;
+    }
+    
+    .brand-subtitle {
+      font-size: 14px;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+    
+    .welcome-section {
+      background: white;
+      border-radius: 24px;
+      padding: 40px 32px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      max-width: 450px;
+      width: 100%;
+      animation: fadeInUp 0.8s ease 0.2s both;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .welcome-title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1E3A3A;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    
+    .welcome-text {
+      font-size: 15px;
+      color: #6b7280;
+      text-align: center;
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+    
+    .role-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    
+    .role-btn {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 18px 24px;
+      background: linear-gradient(135deg, #1E3A3A 0%, #2d5050 100%);
+      color: white;
+      border-radius: 14px;
+      text-decoration: none;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(30, 58, 58, 0.2);
+    }
+    
+    .role-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(30, 58, 58, 0.4);
+    }
+    
+    .role-btn:active {
+      transform: translateY(-1px);
+    }
+    
+    .role-icon {
+      font-size: 32px;
+      flex-shrink: 0;
+    }
+    
+    .role-info {
+      flex: 1;
+      text-align: left;
+    }
+    
+    .role-name {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    
+    .role-desc {
+      font-size: 12px;
+      opacity: 0.85;
+      font-weight: 400;
+    }
+    
+    .footer-text {
+      text-align: center;
+      color: rgba(255,255,255,0.8);
+      font-size: 12px;
+      margin-top: 24px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 700px) {
+      .logo-image {
+        width: 300px;
+      }
+      
+      .brand-title {
+        font-size: 26px;
+      }
+      
+      .brand-subtitle {
+        font-size: 12px;
+      }
+      
+      .welcome-section {
+        padding: 32px 24px;
+      }
+      
+      .welcome-title {
+        font-size: 24px;
+      }
+      
+      .welcome-text {
+        font-size: 14px;
+        margin-bottom: 24px;
+      }
+      
+      .role-btn {
+        padding: 16px 20px;
+        font-size: 16px;
+      }
+      
+      .role-icon {
+        font-size: 28px;
+      }
+      
+      .role-name {
+        font-size: 16px;
+      }
+      
+      .role-desc {
+        font-size: 11px;
+      }
+    }
+    
+    @media (max-width: 400px) {
+      .logo-image {
+        width: 300px;
+      }
+      
+      .brand-title {
+        font-size: 22px;
+      }
+      
+      .welcome-section {
+        padding: 24px 20px;
+      }
+      
+      .welcome-title {
+        font-size: 20px;
+      }
+      
+      .role-btn {
+        padding: 14px 16px;
+        font-size: 15px;
+      }
+      
+      .role-icon {
+        font-size: 24px;
+      }
+    }
+  </style>
 </head>
-<body class="green-bg">
-  <div class="screen center-screen">
-    <div class="logo-row">
-      <div class="logo-icon">S</div>
-      <span class="logo-text">BIO TRACE LABS</span>
+<body>
+  <div class="main-container">
+    <!-- Logo y Marca -->
+    <div class="logo-container">
+      <img src="logo/logo_app_sinfondo1.png" alt="BioTrace Labs" class="logo-image">
+      <div class="brand-title"></div>
+      <div class="brand-subtitle">Sistema de Trazabilidad Forestal</div>
     </div>
-    <h1 class="welcome-title">Bienvenido</h1>
-    <div class="role-buttons">
-      <a href="pages/login.html?role=titular" class="btn btn-dark">TITULAR</a>
-      <a href="pages/login.html?role=chofer" class="btn btn-dark">CHOFER</a>
-      <a href="pages/login.html?role=centro" class="btn btn-dark">CENTRO DE<br>TRANSFORMACIÓN</a>
+    
+    <!-- Sección de Bienvenida -->
+    <div class="welcome-section">
+      <h1 class="welcome-title">¡Bienvenido!</h1>
+      <p class="welcome-text">
+        Selecciona tu rol para acceder al sistema de trazabilidad forestal
+      </p>
+      
+      <div class="role-buttons">
+        <a href="pages/login.html?role=titular" class="role-btn">
+          <span class="role-icon">🌳</span>
+          <div class="role-info">
+            <div class="role-name">TITULAR</div>
+            <div class="role-desc">Dueño de Título Habilitante</div>
+          </div>
+        </a>
+        
+        <a href="pages/login.html?role=chofer" class="role-btn">
+          <span class="role-icon">🚛</span>
+          <div class="role-info">
+            <div class="role-name">CHOFER</div>
+            <div class="role-desc">Conductor de Transporte</div>
+          </div>
+        </a>
+        
+        <a href="pages/login.html?role=centro" class="role-btn">
+          <span class="role-icon">🏭</span>
+          <div class="role-info">
+            <div class="role-name">CENTRO</div>
+            <div class="role-desc">Centro de Transformación</div>
+          </div>
+        </a>
+      </div>
+    </div>
+    
+    <div class="footer-text">
+      © 2026 BioTrace Labs - OSINFOR Perú
     </div>
   </div>
 </body>

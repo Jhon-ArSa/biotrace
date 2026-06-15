@@ -8,22 +8,33 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
   <style>
     .header-banner {
-      background: linear-gradient(135deg, #0d3b2e 0%, #1a5c47 100%);
+      background: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
       color: white;
       padding: 24px;
       border-radius: 16px;
       margin-bottom: 24px;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .header-logo {
+      width: 50px;
+      height: auto;
+      margin: 0 auto;
+      border: none;
+      outline: none;
+      display: block;
+      filter: brightness(0) invert(1);
+      opacity: 0.95;
     }
     
     .header-banner h1 {
-      margin: 0 0 8px 0;
+      margin: 0;
       font-size: 28px;
       font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
     }
     
     .header-banner p {
@@ -53,11 +64,78 @@
       color: #166534;
       font-weight: 500;
     }
+    
+    /* Responsive */
+    @media (max-width: 640px) {
+      .header-banner {
+        padding: 16px;
+        border-radius: 12px;
+        margin-bottom: 16px;
+      }
+      
+      .header-banner h1 {
+        font-size: 20px;
+      }
+      
+      .header-banner p {
+        font-size: 12px;
+      }
+      
+      .scan-card {
+        padding: 20px 16px;
+        border-radius: 12px;
+      }
+      
+      .scan-instructions {
+        padding: 12px;
+        font-size: 13px;
+      }
+      
+      .qr-reader-box {
+        max-width: 100%;
+        min-height: 220px;
+      }
+      
+      .scan-success-title {
+        font-size: 20px;
+      }
+      
+      .datos-title {
+        font-size: 18px;
+      }
+      
+      .data-label {
+        font-size: 14px;
+      }
+      
+      .data-value {
+        font-size: 13px;
+      }
+    }
+    
+    @media (max-width: 380px) {
+      .header-banner {
+        padding: 12px;
+      }
+      
+      .header-banner h1 {
+        font-size: 18px;
+      }
+      
+      .scan-card {
+        padding: 16px 12px;
+      }
+      
+      .qr-reader-box {
+        min-height: 200px;
+      }
+    }
   </style>
 </head>
 <body class="mint-bg">
   <div class="screen center-screen" style="max-width: 600px;">
     <div class="header-banner">
+      <img src="../logo/logo_app_sinfondo1.png" alt="BioTrace" class="header-logo">
       <h1>📱 Escanear QR</h1>
       <p>Centro de Transformación</p>
     </div>

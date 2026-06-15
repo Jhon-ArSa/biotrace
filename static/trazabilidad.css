@@ -345,21 +345,575 @@ body {
   width: 100%;
 }
 
-/* ===== RESPONSIVE ===== */
-@media (max-width:768px) {
-  .comparison-images-grid {
-    grid-template-columns: 1fr !important;
+/* ===== RESPONSIVE DESIGN COMPLETO ===== */
+
+/* Tablets (769px - 1024px) */
+@media (max-width: 1024px) {
+  :root {
+    --header-h: 60px;
+  }
+  
+  .app-header {
+    padding: 0 16px;
+  }
+  
+  .header-title {
+    font-size: 16px;
+  }
+  
+  .header-role {
+    font-size: 11px;
   }
 }
 
-@media (max-width:400px) {
-  .form-grid { grid-template-columns:1fr; }
-  .foto-upload-section { grid-template-columns:1fr 1fr; }
-  .stats-grid { grid-template-columns:1fr 1fr; }
-  .chofer-card { flex-direction:column; text-align:center; }
-  .modal-footer { flex-direction:column; }
+/* Mobile Landscape & Small Tablets (481px - 768px) */
+@media (max-width: 768px) {
+  :root {
+    --header-h: 56px;
+    --nav-h: 64px;
+  }
+  
+  .comparison-images-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .login-card {
+    padding: 32px 24px;
+    max-width: 100%;
+  }
+  
+  .app-header {
+    padding: 0 12px;
+  }
+  
+  .header-left {
+    gap: 8px;
+  }
+  
+  .brand-icon-sm {
+    width: 36px;
+    height: 36px;
+    font-size: 20px;
+  }
+  
+  .header-title {
+    font-size: 14px;
+  }
+  
+  .header-role {
+    font-size: 10px;
+  }
+  
+  .user-name {
+    font-size: 12px;
+  }
+  
+  .btn-logout {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+  
+  .bottom-nav {
+    padding: 8px;
+  }
+  
+  .nav-btn {
+    padding: 8px 4px;
+    font-size: 12px;
+  }
+  
+  .nav-icon {
+    font-size: 20px;
+  }
+  
+  .app-main {
+    padding: 16px 12px calc(var(--nav-h) + 16px);
+  }
+  
+  .section-header h1 {
+    font-size: 22px;
+  }
+  
+  .section-header p {
+    font-size: 13px;
+  }
+  
+  .form-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .foto-upload-section {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  
+  .chofer-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+  
+  .chofer-foto {
+    margin: 0 auto;
+  }
+  
+  .modal-card {
+    width: 90%;
+    max-width: none;
+    padding: 24px 20px;
+  }
+  
+  .modal-footer {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .modal-footer button {
+    width: 100%;
+  }
+  
+  .cards-list {
+    gap: 12px;
+  }
+  
+  .trozo-card,
+  .guia-card,
+  .pedido-card {
+    padding: 14px;
+  }
 }
-@media (min-width:600px) {
-  .login-card { padding:48px 40px; }
-  .app-main { padding-left:24px; padding-right:24px; }
+
+/* Mobile Portrait (320px - 480px) */
+@media (max-width: 480px) {
+  :root {
+    --header-h: 52px;
+    --nav-h: 60px;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+  
+  body {
+    font-size: 14px;
+  }
+  
+  .login-card {
+    padding: 24px 20px;
+    border-radius: 16px;
+  }
+  
+  .brand-logo {
+    gap: 10px;
+    margin-bottom: 4px;
+  }
+  
+  .brand-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+  }
+  
+  .brand-name {
+    font-size: 16px;
+  }
+  
+  .login-subtitle {
+    font-size: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .input-group {
+    margin-bottom: 12px;
+  }
+  
+  .input-group label {
+    font-size: 11px;
+  }
+  
+  .input-group input,
+  .input-group select,
+  .input-group textarea {
+    padding: 11px 14px;
+    font-size: 13px;
+  }
+  
+  .btn-primary {
+    padding: 12px;
+    font-size: 14px;
+  }
+  
+  .btn-large {
+    padding: 14px;
+    font-size: 15px;
+  }
+  
+  .demo-hints {
+    margin-top: 20px;
+    padding-top: 16px;
+  }
+  
+  .demo-label {
+    font-size: 11px;
+  }
+  
+  .demo-btn {
+    padding: 8px;
+    font-size: 12px;
+  }
+  
+  .app-header {
+    padding: 0 10px;
+  }
+  
+  .brand-icon-sm {
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+  }
+  
+  .header-title {
+    font-size: 13px;
+  }
+  
+  .header-role {
+    font-size: 9px;
+  }
+  
+  .user-name {
+    font-size: 11px;
+    display: none;
+  }
+  
+  .btn-logout {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+  
+  .bottom-nav {
+    padding: 6px;
+  }
+  
+  .nav-btn {
+    padding: 6px 2px;
+    font-size: 11px;
+    gap: 2px;
+  }
+  
+  .nav-icon {
+    font-size: 18px;
+  }
+  
+  .app-main {
+    padding: 12px 10px calc(var(--nav-h) + 12px);
+  }
+  
+  .section-header {
+    margin-bottom: 16px;
+  }
+  
+  .section-header h1 {
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+  
+  .section-header h2 {
+    font-size: 18px;
+  }
+  
+  .section-header p {
+    font-size: 12px;
+  }
+  
+  .form-grid {
+    gap: 10px;
+  }
+  
+  .foto-upload-section {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .foto-upload-card {
+    min-height: 160px;
+  }
+  
+  .foto-placeholder {
+    padding: 16px;
+  }
+  
+  .foto-icon {
+    font-size: 36px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  
+  .stat-big {
+    font-size: 28px;
+  }
+  
+  .stat-label-big {
+    font-size: 11px;
+  }
+  
+  .chofer-avatar {
+    width: 120px;
+    height: 120px;
+    font-size: 48px;
+  }
+  
+  .btn-upload-foto {
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+  
+  .chofer-datos {
+    gap: 8px;
+  }
+  
+  .dato-row {
+    padding: 8px 10px;
+  }
+  
+  .dato-label {
+    font-size: 10px;
+  }
+  
+  .dato-val {
+    font-size: 12px;
+  }
+  
+  .verify-box {
+    padding: 16px;
+  }
+  
+  .qr-scan-area {
+    height: 200px;
+  }
+  
+  .qr-frame {
+    width: 160px;
+    height: 160px;
+  }
+  
+  .qr-icon-big {
+    font-size: 48px;
+  }
+  
+  .qr-hint {
+    font-size: 12px;
+  }
+  
+  .code-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .code-row input,
+  .code-row button {
+    width: 100%;
+  }
+  
+  .search-bar input {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+  
+  .cards-list {
+    gap: 10px;
+  }
+  
+  .trozo-card,
+  .guia-card,
+  .pedido-card {
+    padding: 12px;
+    border-radius: 10px;
+  }
+  
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .card-codigo {
+    font-size: 14px;
+  }
+  
+  .card-badge {
+    padding: 4px 10px;
+    font-size: 10px;
+  }
+  
+  .card-row {
+    font-size: 12px;
+  }
+  
+  .card-actions {
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  .card-btn {
+    padding: 6px 12px;
+    font-size: 11px;
+    width: 100%;
+  }
+  
+  .modal-card {
+    width: 95%;
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+  
+  .modal-header h2 {
+    font-size: 18px;
+  }
+  
+  .modal-close {
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+  }
+  
+  .qr-generated {
+    width: 180px;
+    height: 180px;
+  }
+  
+  .qr-data {
+    font-size: 12px;
+  }
+  
+  .error-msg {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+  
+  .loading-spinner {
+    padding: 30px;
+    font-size: 13px;
+  }
+}
+
+/* Very Small Mobile (320px - 380px) */
+@media (max-width: 380px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .foto-upload-section { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+  .chofer-card { flex-direction: column; text-align: center; }
+  .modal-footer { flex-direction: column; }
+  
+  .login-card {
+    padding: 20px 16px;
+  }
+  
+  .brand-name {
+    font-size: 14px;
+  }
+  
+  .section-header h1 {
+    font-size: 18px;
+  }
+  
+  .nav-btn span:not(.nav-icon) {
+    font-size: 10px;
+  }
+  
+  .stat-big {
+    font-size: 24px;
+  }
+  
+  .card-codigo {
+    font-size: 13px;
+  }
+}
+
+/* Landscape Optimization for Mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+  .login-bg {
+    padding: 12px;
+  }
+  
+  .login-card {
+    padding: 20px 16px;
+    max-width: 500px;
+  }
+  
+  .brand-logo {
+    margin-bottom: 2px;
+  }
+  
+  .login-subtitle {
+    margin-bottom: 16px;
+  }
+  
+  .input-group {
+    margin-bottom: 10px;
+  }
+  
+  .demo-hints {
+    margin-top: 12px;
+    padding-top: 12px;
+  }
+  
+  .app-main {
+    padding: 10px 12px calc(var(--nav-h) + 10px);
+  }
+  
+  .section-header {
+    margin-bottom: 12px;
+  }
+  
+  .foto-upload-card {
+    min-height: 120px;
+  }
+  
+  .qr-scan-area {
+    height: 160px;
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .btn-primary,
+  .btn-secondary,
+  .btn-large,
+  .card-btn,
+  .nav-btn {
+    min-height: 44px;
+  }
+  
+  .input-group input,
+  .input-group select,
+  .input-group textarea {
+    min-height: 44px;
+  }
+}
+
+/* High Resolution Displays */
+@media (min-width: 600px) {
+  .login-card {
+    padding: 48px 40px;
+  }
+  
+  .app-main {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .app-main {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
 }

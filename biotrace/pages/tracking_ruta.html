@@ -327,6 +327,197 @@
       0%, 100% { transform: scale(1); opacity: 1; }
       50% { transform: scale(1.1); opacity: 0.8; }
     }
+    
+    /* Additional Mobile Optimizations */
+    @media (max-width: 480px) {
+      .container {
+        padding: 10px;
+      }
+      
+      .header {
+        padding: 16px 12px;
+        border-radius: 10px;
+        margin-bottom: 12px;
+      }
+      
+      .header h1 {
+        font-size: 18px;
+      }
+      
+      .header p {
+        font-size: 12px;
+      }
+      
+      .status-bar {
+        padding: 10px 12px;
+        border-radius: 8px;
+        margin-bottom: 12px;
+      }
+      
+      .status-badge {
+        padding: 5px 14px;
+        font-size: 12px;
+      }
+      
+      .map-container {
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 12px;
+      }
+      
+      .map-title {
+        font-size: 14px;
+        margin: 0 0 8px 0;
+      }
+      
+      .legend {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+        margin-top: 12px;
+        font-size: 10px;
+      }
+      
+      .legend-color {
+        width: 12px;
+        height: 12px;
+      }
+      
+      .checkpoints-list {
+        margin-top: 12px;
+        padding-top: 12px;
+      }
+      
+      .checkpoint-item {
+        gap: 8px;
+        padding: 8px;
+        margin-bottom: 6px;
+      }
+      
+      .checkpoint-number {
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
+      }
+      
+      .checkpoint-name {
+        font-size: 12px;
+      }
+      
+      .checkpoint-time {
+        font-size: 10px;
+      }
+      
+      .info-card {
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 10px;
+      }
+      
+      .card-title {
+        font-size: 13px;
+        margin: 0 0 10px 0;
+        gap: 5px;
+      }
+      
+      .info-row {
+        padding: 6px 0;
+      }
+      
+      .info-label {
+        font-size: 11px;
+      }
+      
+      .info-value {
+        font-size: 12px;
+      }
+      
+      .btn-back {
+        padding: 10px;
+        font-size: 13px;
+        margin-top: 12px;
+      }
+      
+      .loading, .error {
+        padding: 30px 15px;
+      }
+    }
+    
+    @media (max-width: 380px) {
+      .header h1 {
+        font-size: 16px;
+      }
+      
+      .map-title {
+        font-size: 13px;
+      }
+      
+      .legend {
+        font-size: 9px;
+      }
+      
+      .checkpoint-number {
+        width: 22px;
+        height: 22px;
+        font-size: 11px;
+      }
+      
+      .checkpoint-name {
+        font-size: 11px;
+      }
+      
+      .card-title {
+        font-size: 12px;
+      }
+      
+      .info-label,
+      .info-value {
+        font-size: 11px;
+      }
+    }
+    
+    /* Landscape optimization */
+    @media (max-height: 500px) and (orientation: landscape) {
+      .container {
+        padding: 8px;
+      }
+      
+      .header {
+        padding: 12px 10px;
+        margin-bottom: 8px;
+      }
+      
+      .map-container {
+        padding: 10px;
+      }
+      
+      .mapaSvg {
+        max-height: 300px;
+      }
+    }
+    
+    /* SVG responsive improvements */
+    @media (max-width: 640px) {
+      .department {
+        stroke-width: 0.8;
+      }
+      
+      .route-line {
+        stroke-width: 3;
+      }
+      
+      .checkpoint circle {
+        r: 8;
+        stroke-width: 1.5;
+      }
+      
+      .checkpoint text {
+        font-size: 8;
+      }
+      
+      .truck text {
+        font-size: 20;
+      }
+    }
   </style>
 </head>
 <body>
