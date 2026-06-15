@@ -1,0 +1,10 @@
+# Archivos que Render debe ignorar
+*.md
+.git/
+.vscode/
+.idea/
+test_*.py
+*.log
+.env.example
+docs/
+screenshots/
